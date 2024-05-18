@@ -5,6 +5,44 @@ import Animation from "../components/animation";
 import LazyLoad from "react-lazyload";
 
 function Repelsteeltje() {
+
+    const [style, setStyle] = useState('Formal');
+    const [text, setText] = useState('Er was eens...');
+    const [styledText, setStyledText] = useState('');
+    const [error, setError] = useState('');
+
+    const handleStyleChange = (event) => {
+        setStyle(event.target.value);
+    };
+	const applyStyle = async () => {
+		setError('');  // Reset any previous error
+		try {
+			const response = await fetch('http://localhost:3001/generate-text', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ prompt: text, style, model: 'gpt-3.5-turbo' })
+			});
+	
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(errorData.error || 'Error generating text');
+			}
+	
+			const responseData = await response.json();
+			console.log('Response data:', responseData); // Log the response data
+	
+			const styledMessage = responseData.choices[0].message;
+			console.log('Styled message:', styledMessage);
+			setStyledText(styledMessage.content || 'No styled text found3');
+		} catch (error) {
+			console.error('Error:', error);
+			setError(error.message);
+		}
+	};
+
+
 	return (
 		<div className="repelsteeltje-container">
 			<Parallax pages={9.2} style={{ top: "0", left: "0" }}>
@@ -45,6 +83,27 @@ function Repelsteeltje() {
 				</ParallaxLayer>
 				<ParallaxLayer offset={0} speed={0.6} factor={1}>
 					<div className="fsanimation-layer" id="scene-1-11"></div>
+				</ParallaxLayer>
+				<ParallaxLayer offset={0} speed={0.6} factor={1}>
+				<div className="repelsteeltje-container">
+            <div className="text-styling">
+                <textarea
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    placeholder="Enter your text here..."
+                ></textarea>
+                <select value={style} onChange={handleStyleChange}>
+                    <option value="Formal">Formal</option>
+                    <option value="Informal">Informal</option>
+                    <option value="Fairy Tale">Fairy Tale</option>
+                </select>
+                <button onClick={applyStyle}>Apply Style</button>
+                {error && <p className="error">{error}</p>}
+            </div>
+            <div className="styled-text">
+                {styledText && <p>{styledText}</p>}
+            </div>
+        </div>
 				</ParallaxLayer>
 
 				<ParallaxLayer offset={2} speed={0}>
@@ -317,7 +376,8 @@ function Repelsteeltje() {
 					<div className="animation-layer" id="rev-parallax-03"></div>
 				</ParallaxLayer>
 			</Parallax>
-		</div>
+
+        </div>		
 	);
 }
 export default Repelsteeltje;
