@@ -1,22 +1,25 @@
-# AI course project!
-This is a AI project built on my front-end project.
+# React - Name project
 
-## Browser support
-1. recommended browser to use is Firefox or Firefox developper edition!
+This is my front-end project!
 
 ## Installing Vite 
 
 1. Open the Terminal (ctrl + ù).
 2. Type: `cd ./portaal`
-3. Type: `npm install` to install all dependencies.
-4. Type: `npm run dev` to start the server.
+2. Type: `npm create vite@latest`.
+3. Enter a name for your project, e.g., "react-test".
+4. Choose a library: React.
+5. Choose a language: JavaScript.
+6. Type: `cd react-test` to change the directory.
+7. Type: `npm install` to install all dependencies.
+8. Type: `npm run dev` to start the server.
 
 ## Documentation
 
 Links naar online portaal: https://ehb-mct.github.io/frontend-courseproject-JochenSunaert/
 
 Link naar sprookje: https://ehb-mct.github.io/frontend-courseproject-JochenSunaert/repelsteeltje
--OF ga naar making of en klik op de top image!
+-OF zoek voor jochen sunaert in portaal en ga naar sprookje!
 
 ### Sources used
 
