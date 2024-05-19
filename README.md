@@ -4,19 +4,20 @@ This is a AI project built on my front-end project.
 ## Browser support
 1. recommended browser to use is Firefox or Firefox developper edition!
 
-## Installing Vite 
+## Setting up the project
 
-1. Open the Terminal (ctrl + ù).
+1. Open the Terminal.
 2. Type: `cd ./portaal`
 3. Type: `npm install` to install all dependencies.
 4. Type: `npm run dev` to start the server.
+5: open the given site.
 
-## Documentation
+6. open a new terminal
+7. Type: `cd ./text-styler-backend`
+8. Type: `npm install` to install all dependencies.
+9. Type: `node server.js` to start the server.
 
-Links naar online portaal: https://ehb-mct.github.io/frontend-courseproject-JochenSunaert/
-
-Link naar sprookje: https://ehb-mct.github.io/frontend-courseproject-JochenSunaert/repelsteeltje
--OF ga naar making of en klik op de top image!
+10: navigate to `yourlocalhost/AI-course-project/repelsteeltje` in the site
 
 ### Sources used
 
@@ -26,7 +27,6 @@ Free license items were used from https://nl.vecteezy.com/
 These are high quality vector images that are free to use. 
 What i wanted to realize with ai pictures only was not possible within the deathline.
 Using these images allowed me to focus on coding.
-
 
 Attic: https://nl.vecteezy.com/vector-kunst/15369774-knus-kamer-aan-zolder-met-hangmat-sofa-en-venster
 farm: https://nl.vecteezy.com/vector-kunst/13997947-parallax-achtergrond-landelijk-landschap-bouwland
