@@ -19,11 +19,11 @@ This is a AI project built on my front-end project.
 
 10: navigate to `yourlocalhost/AI-course-project/repelsteeltje` in the site
 
-### Sources used
+# Sources used
 
 Free license items were used from https://nl.vecteezy.com/ 
 
-# reason
+## reason
 These are high quality vector images that are free to use. 
 What i wanted to realize with ai pictures only was not possible within the deathline.
 Using these images allowed me to focus on coding.
