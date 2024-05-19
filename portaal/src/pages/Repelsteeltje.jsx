@@ -1,27 +1,29 @@
-import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 import { useState } from "react";
+import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 import { Outlet, Link } from "react-router-dom";
 import Animation from "../components/animation";
 import LazyLoad from "react-lazyload";
 
 function Repelsteeltje() {
+    const [style, setStyle] = useState('Formeel');
+    const [text, setText] = useState('Er was eens...');
+    const [styledText, setStyledText] = useState('');
+    const [error, setError] = useState('');
 
-	const [style, setStyle] = useState('Formeel');
-	const [text, setText] = useState('Er was eens...');
-	const [styledText, setStyledText] = useState('');
-	const [error, setError] = useState('');
-
-	const initialFixedPromptTexts = ['', '', '' , '', '' , '', '' , '']; // Add as many as needed
-	const [fixedPromptTexts, setFixedPromptTexts] = useState(initialFixedPromptTexts);
-	    const [language, setLanguage] = useState(''); // Taal toegevoegd
+    const initialFixedPromptTexts = ['', '', '', '', '', '', '', ''];
+    const [fixedPromptTexts, setFixedPromptTexts] = useState(initialFixedPromptTexts);
+    const [language, setLanguage] = useState(''); 
 
 
 	const fixedPrompts = [
 		`
+		${language}
+		RESPOND IN THE GIVEN LANGUAGE. YOU MUST ALWAYS LOOK AT THE LANGUAGE PROVIDED AND RESPECT IT AND ANSWER IN THAT LANGUAGE.
         Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
 		VOEG NOOIT CSS TOE. PAS GEEN REGELLIJNEN HOOGTES AAN. houd ermee rekening dat het altijd over een man en zijn dochter gaat. jouw text moet altijd beginnen met een <p> en eindigen op </p>
+		look at the language provided. if 'de' talk german, if NL talk dutch if FR talk french and if EN talk english
 
-        <p>
+        <p lang="${language}">
             in een wereld ver weg van hier, waar de wind zong door de toppen
             van eeuwenoude bomen,
             <br />
@@ -36,12 +38,17 @@ function Repelsteeltje() {
             Samen bewerkten ze het land en deelden ze momenten van vreugde te
             midden van de rust van hun bescheiden boerderij.
         </p>
+
+		remember to always respect the provided language in your response.
         `,
 		`
+		RESPOND IN THE GIVEN LANGUAGE. YOU MUST ALWAYS LOOK AT THE LANGUAGE PROVIDED AND RESPECT IT AND ANSWER IN THAT LANGUAGE.
         behoud deze text, maar Verander deze tekst zodat hij anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
 		VOEG NOOIT CSS TOE. houd ermee rekening dat het tekstje gaat over een dochter die tegen haar vader praat. het gaad altijd over goud. jouw text moet altijd beginnen met een <p> en eindigen op </p>
+		schrijf nooit andere speciale tekens zoals backticks.
+		always respect the provided language in your response.
 
-		<p>
+		<p lang="${language}">
 		"Vader, <br />
 		ik geloof dat ik iets kan wat de mensen versteld zal doen
 		staan.
@@ -50,78 +57,89 @@ function Repelsteeltje() {
 	</p>
         `,
 		`
+		RESPOND IN THE GIVEN LANGUAGE. YOU MUST ALWAYS LOOK AT THE LANGUAGE PROVIDED AND RESPECT IT AND ANSWER IN THAT LANGUAGE.
         behoud deze text, maar Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen.. maak het in de stijl die is meegegeven.
 		VOEG NOOIT CSS TOE. houd ermee rekening dat het tekstje gaat over een vader die tegen haar dochter praat. jouw text moet altijd beginnen met een <p> en eindigen op </p>
+		schrijf nooit andere speciale tekens zoals backticks.
 
-		<p>		
+		<p lang="${language}">	
 		"Dat is erg speciaal mijn dochter, <br />
 		Ik moet dit vertellen aan de prins, zodat je <br />
 		met hem kan trouwen."
 		</p>
         `,
-		`				behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
+		`
+		RESPOND IN THE GIVEN LANGUAGE. YOU MUST ALWAYS LOOK AT THE LANGUAGE PROVIDED AND RESPECT IT AND ANSWER IN THAT LANGUAGE.
+						behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
 						Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
 						VOEG NOOIT CSS TOE. houd ermee rekening dat het eerste tekstje gaat over een prins die tegen de molenaars dochter praat.
 						Het tekstje gaat altijd over goud!
 						de texten die jij verandert begint met een <p> en eindigen op </p>, doe nooit iets anders met de html.
+						schrijf nooit andere speciale tekens zoals backticks.
 					
-											<p>
+						<p lang="${language}">
 												"Bewijs jouzelf dat je goud kan spinnen, en alleen als je dit
 												kan zal en wil ik met je trouwen."
 											</p>
 										`,
 
-										`
+		`								
+		RESPOND IN THE GIVEN LANGUAGE. YOU MUST ALWAYS LOOK AT THE LANGUAGE PROVIDED AND RESPECT IT AND ANSWER IN THAT LANGUAGE.
 										behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
 										Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
 										houd ermee rekening dat dit verhaaltje word vertelt door de verteller.
 										de texten die jij verandert begint met een <p> en eindigen op </p>, doe nooit iets anders met de html.
 										het tekstje gaad altijd over goud!
+										schrijf nooit andere speciale tekens zoals backticks.
 										
 										de texten die jij verandert begint met een <p> en eindigen op </p>
-															<p>
+										<p lang="${language}">
 																Al snel had de dochter spijt dat ze dit had vertelt, want ze kan
 																natuurlijk geen goud spinnen. totdat er iemand mysterieus
-																tevoorschijn kwam.{" "}
+																tevoorschijn kwam.
 															</p>`
 		,
 		`
+		RESPOND IN THE GIVEN LANGUAGE. YOU MUST ALWAYS LOOK AT THE LANGUAGE PROVIDED AND RESPECT IT AND ANSWER IN THAT LANGUAGE.
 		behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
 		Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
 		VOEG NOOIT CSS TOE. houd ermee rekening dat het tekstje gaat over repelsteeltje die praat tegen de molenaarsdochter.
 		het gaat altijd over goud!
 		
 		de texten die jij verandert begint met een <p> en eindigen op </p>, doe nooit iets anders met de html.
+		schrijf nooit backticks
 		
 		
-							<p>
+		<p lang="${language}">
 								"Ik kan goud spinnen voor jouw, maar daar is een catch achter.
 								ik doe dit alleen in ruil voor jouw eerste kind."
 							</p>`
 		,
 		`
+		RESPOND IN THE GIVEN LANGUAGE. YOU MUST ALWAYS LOOK AT THE LANGUAGE PROVIDED AND RESPECT IT AND ANSWER IN THAT LANGUAGE.
 		behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
 		Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
 		VOEG NOOIT CSS TOE. houd ermee rekening dat het van het perspectief van een verteller komt.
 		
-		de texten die jij verandert begint met een <p> en eindigen op </p>, De quest is in de <mark> tag. doe nooit iets anders met de html.
+		de texten die jij verandert begint met een <p> en eindigen op </p>, De quest is in de <mark> tag. VERANDER NOOIT IETS ANDERS MET HTML OF CSS
 		
 		
-		<p>
+		<p lang="${language}">
 		De man spon goud voor de dochter in ruil voor hun eerste kind.
 		De koning en de dochter trouwden samen. ze kregen een kindje. De koning stuurt jouw op om zijn naam te achterhalen!<br /><br />
 		<mark>Quest: Hover over De mysterieuse man voor zijn naam te achterhalen</mark>
 	</p>`,
 
-	`
+		`
+		RESPOND IN THE GIVEN LANGUAGE. YOU MUST ALWAYS LOOK AT THE LANGUAGE PROVIDED AND RESPECT IT AND ANSWER IN THAT LANGUAGE.
 	behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
 	Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
 	VOEG NOOIT CSS TOE. houd ermee rekening dat het eerste tekstje gaat over een prins die tegen repelsteeltje praat.
 	
-	de texten die jij verandert begint met een <p> en eindigen op </p>, De quest is in de <mark> tag. doe nooit iets anders met de html.
+	schrijf nooit backticks
+	de texten die jij verandert begint met een <p> en eindigen op </p>, VERANDER NOOIT IETS ANDERS MET HTML OF CSS
 	
-	
-	<p>
+	<p lang="${language}">
 	Na erg veel nadenken hebben wij het gevonden! Jouw naam is repelsteeltje!
 </p>`
 
@@ -129,50 +147,53 @@ function Repelsteeltje() {
 	];
 
 	const handleStyleChange = (event) => {
-		setStyle(event.target.value);
-	};
+        setStyle(event.target.value);
+    };
+
+    const handleLanguageChange = (event) => {
+        setLanguage(event.target.value);
+    };
 
 	const generateText = async (prompt, index = null, language = '') => {
-        try {
-            const response = await fetch('http://localhost:3001/generate-text', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ prompt, style, model: 'gpt-3.5-turbo', temperature: 0.2, max_tokens: 50, language })
-            });
+		try {
+			const response = await fetch('http://localhost:3001/generate-text', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ prompt, style, model: 'gpt-4o', language })
+			});
+	
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(errorData.error || 'Error generating text');
+			}
+	
+			const responseData = await response.json();
+			const styledMessage = responseData.choices[0].message.content || 'No styled text found';
+	
+			if (index === null) {
+				setStyledText(styledMessage);
+			} else {
+				setFixedPromptTexts(prev => {
+					const newTexts = [...prev];
+					newTexts[index] = styledMessage;
+					return newTexts;
+				});
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			setError(error.message);
+		}
+	};
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Error generating text');
-            }
-
-            const responseData = await response.json();
-            const styledMessage = responseData.choices[0].message.content || 'No styled text found';
-
-            if (index === null) {
-                setStyledText(styledMessage);
-            } else {
-                setFixedPromptTexts(prev => {
-                    const newTexts = [...prev];
-                    newTexts[index] = styledMessage;
-                    return newTexts;
-                });
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            setError(error.message);
+    const applyStyle = async () => {
+        setError('');  
+        await generateText(text, null, language);
+        for (let i = 0; i < fixedPrompts.length; i++) {
+            await generateText(fixedPrompts[i], i, language);
         }
     };
-
-	const applyStyle = async () => {
-        setError('');  // Reset any previous error
-        await generateText(text); // Generate text for user input
-        for (let i = 0; i < fixedPromptTexts.length; i++) {
-            await generateText(fixedPrompts[i], i, style); // Generate styled text for fixed prompts with specified language
-        }
-    };
-
 
 
 	return (
@@ -218,25 +239,31 @@ function Repelsteeltje() {
 				</ParallaxLayer>
 
 				<ParallaxLayer offset={0} speed={0.6} factor={1}>
-					<div className="repelsteeltje-container">
-						<div className="text-styling">
-							<textarea
-								value={text}
-								onChange={(e) => setText(e.target.value)}
-								placeholder="Enter your text here..."
-							></textarea>
-							<select value={style} onChange={handleStyleChange}>
-								<option value="Formeel">Formeel</option>
-								<option value="Informeel">Informeel</option>
-								<option value="sprookjesstijl">sprookje</option>
-							</select>
-							<button onClick={applyStyle}>Apply Style</button>
-							{error && <p className="error">{error}</p>}
-						</div>
-						<div className="styled-text">
-							{styledText && <p>{styledText}</p>}
-						</div>
-					</div>
+				<div className="repelsteeltje-container">
+                        <div className="text-styling">
+                            <textarea
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                                placeholder="Enter your text here..."
+                            ></textarea>
+                            <select value={style} onChange={handleStyleChange}>
+                                <option value="Formeel">Formeel</option>
+                                <option value="Informeel">Informeel</option>
+                                <option value="sprookjesstijl">sprookje</option>
+                            </select>
+                            <select value={language} onChange={handleLanguageChange}>
+								<option value="en">English</option>
+            					<option value="fr">Français</option>
+           						 <option value="nl">Nederlands</option>
+            					<option value="de">Deutsch</option>
+                            </select>
+                            <button onClick={applyStyle}>Apply Style</button>
+                            {error && <p className="error">{error}</p>}
+                        </div>
+                        <div className="styled-text">
+                            {styledText && <p>{styledText}</p>}
+                        </div>
+                    </div>
 				</ParallaxLayer>
 
 				<ParallaxLayer offset={2} speed={0}>
@@ -443,26 +470,26 @@ function Repelsteeltje() {
 
 							<img src="koning.png"></img>
 							<div className="fixedPromptDiv">
-									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[3] }}></div>
-								</div>
+								<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[3] }}></div>
+							</div>
 						</div>
 						<div class="sprookjesdiv koningdiv sprookjestextdiv">
 							<p>
-							<div className="fixedPromptDiv">
+								<div className="fixedPromptDiv">
 									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[4] }}></div>
 								</div>
 							</p>
 						</div>
 						<div class="sprookjesdiv koningdiv repelsteeltjediv">
-						<div className="fixedPromptDiv">
-									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[5] }}></div>
-								</div>
+							<div className="fixedPromptDiv">
+								<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[5] }}></div>
+							</div>
 							<Animation />
 						</div>
 						<div class="sprookjesdiv koningdiv sprookjestextdiv">
-						<div className="fixedPromptDiv">
-									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[6] }}></div>
-								</div>
+							<div className="fixedPromptDiv">
+								<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[6] }}></div>
+							</div>
 
 							<p>
 
@@ -471,8 +498,8 @@ function Repelsteeltje() {
 						<div class="sprookjesdiv koningdiv koningmeisjediv">
 							<img src="koningmeisje.png"></img>
 							<div className="fixedPromptDiv">
-									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[7] }}></div>
-								</div>
+								<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[7] }}></div>
+							</div>
 						</div>
 
 					</div>
