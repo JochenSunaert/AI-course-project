@@ -12,7 +12,7 @@ const OPENAI_API_KEY = 'Tja das nu toch spijtig dat mijn key hier niet staat :('
 app.post('/generate-text', async (req, res) => {
     const { prompt, style, model, language } = req.body;
 
-    console.log('Received request:', { prompt, style, model, language }); // Log the received data
+    console.log('Received request:', { prompt, style, model, language }); 
 
     let languagePrompt = '';
     if (language === 'fr') {
@@ -42,8 +42,7 @@ app.post('/generate-text', async (req, res) => {
             }
         });
 
-        console.log('Response data:', response.data); // Log the response data
-
+        console.log('Response data:', response.data);
         res.json(response.data);
     } catch (error) {
         console.error('Error generating text:', error.response ? error.response.data : error.message);

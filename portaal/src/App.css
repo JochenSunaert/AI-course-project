@@ -774,3 +774,47 @@ margin-top: 5%;
 .imagewrap{
   height: 250px;
 }
+
+.gridcontainerai{
+  display: grid;
+}
+.aicontainer{
+  width: 20%;
+  height: 35%;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+}
+
+.text-styling{
+  display: grid;
+  grid-row-gap: 5px;
+}
+
+.aicontainer select{
+  background-color: #AE0018;
+  color: white;
+  border: rgb(107, 13, 13) 3px solid;
+  padding: 10px;
+  
+}
+
+.aicontainer button{
+  background-color: #006474;
+  color: white;
+  border:  none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.aicontainer button:hover{
+  background-color: #007487;
+}
+
+.text-styling p{
+margin: 0;
+padding: 0;
+}
