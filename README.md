@@ -15,7 +15,7 @@ This is a AI project built on my front-end project.
 6. open a new terminal
 7. Type: `cd ./text-styler-backend`
 8. Type: `npm install` to install all dependencies.
-9: Add your openai key in server.js
+9.  Add your openai key in server.js
 10. Type: `node server.js` to start the server.
 
 11: navigate to `yourlocalhost/AI-course-project/repelsteeltje` in the site
