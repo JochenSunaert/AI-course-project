@@ -10,7 +10,7 @@ This is a AI project built on my front-end project.
 2. Type: `cd ./portaal`
 3. Type: `npm install` to install all dependencies.
 4. Type: `npm run dev` to start the server.
-5: open the given site.
+5. open the given site.
 
 6. open a new terminal
 7. Type: `cd ./text-styler-backend`
