@@ -7,7 +7,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+
 const OPENAI_API_KEY = 'zomaar in code kijken voor mijn key!';
+
 
 app.post('/generate-text', async (req, res) => {
     const { prompt, style, model } = req.body;

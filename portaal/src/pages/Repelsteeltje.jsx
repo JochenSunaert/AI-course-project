@@ -6,41 +6,173 @@ import LazyLoad from "react-lazyload";
 
 function Repelsteeltje() {
 
-    const [style, setStyle] = useState('Formal');
-    const [text, setText] = useState('Er was eens...');
-    const [styledText, setStyledText] = useState('');
-    const [error, setError] = useState('');
+	const [style, setStyle] = useState('Formeel');
+	const [text, setText] = useState('Er was eens...');
+	const [styledText, setStyledText] = useState('');
+	const [error, setError] = useState('');
 
-    const handleStyleChange = (event) => {
-        setStyle(event.target.value);
-    };
-	const applyStyle = async () => {
-		setError('');  // Reset any previous error
-		try {
-			const response = await fetch('http://localhost:3001/generate-text', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ prompt: text, style, model: 'gpt-3.5-turbo' })
-			});
+	const initialFixedPromptTexts = ['', '', '' , '', '' , '', '' , '']; // Add as many as needed
+	const [fixedPromptTexts, setFixedPromptTexts] = useState(initialFixedPromptTexts);
+	    const [language, setLanguage] = useState(''); // Taal toegevoegd
+
+
+	const fixedPrompts = [
+		`
+        Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
+		VOEG NOOIT CSS TOE. PAS GEEN REGELLIJNEN HOOGTES AAN. houd ermee rekening dat het altijd over een man en zijn dochter gaat. jouw text moet altijd beginnen met een <p> en eindigen op </p>
+
+        <p>
+            in een wereld ver weg van hier, waar de wind zong door de toppen
+            van eeuwenoude bomen,
+            <br />
+            een gezin dat zijn bestaan vond tussen de wiegende velden en de
+            draaiende wieken van een molen.
+            <br />
+            De molenaar, een man van eenvoud en arbeid, deelde zijn dagen met
+            zijn dochter,
+            <br />
+            een jonge vrouw wiens schoonheid net zo stralend was als het
+            gouden koren dat ze hielp malen. <br />
+            Samen bewerkten ze het land en deelden ze momenten van vreugde te
+            midden van de rust van hun bescheiden boerderij.
+        </p>
+        `,
+		`
+        behoud deze text, maar Verander deze tekst zodat hij anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
+		VOEG NOOIT CSS TOE. houd ermee rekening dat het tekstje gaat over een dochter die tegen haar vader praat. het gaad altijd over goud. jouw text moet altijd beginnen met een <p> en eindigen op </p>
+
+		<p>
+		"Vader, <br />
+		ik geloof dat ik iets kan wat de mensen versteld zal doen
+		staan.
+		<br />
+		Ik kan goud spinnen, vader. Echt goud!"
+	</p>
+        `,
+		`
+        behoud deze text, maar Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen.. maak het in de stijl die is meegegeven.
+		VOEG NOOIT CSS TOE. houd ermee rekening dat het tekstje gaat over een vader die tegen haar dochter praat. jouw text moet altijd beginnen met een <p> en eindigen op </p>
+
+		<p>		
+		"Dat is erg speciaal mijn dochter, <br />
+		Ik moet dit vertellen aan de prins, zodat je <br />
+		met hem kan trouwen."
+		</p>
+        `,
+		`				behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
+						Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
+						VOEG NOOIT CSS TOE. houd ermee rekening dat het eerste tekstje gaat over een prins die tegen de molenaars dochter praat.
+						Het tekstje gaat altijd over goud!
+						de texten die jij verandert begint met een <p> en eindigen op </p>, doe nooit iets anders met de html.
+					
+											<p>
+												"Bewijs jouzelf dat je goud kan spinnen, en alleen als je dit
+												kan zal en wil ik met je trouwen."
+											</p>
+										`,
+
+										`
+										behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
+										Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
+										houd ermee rekening dat dit verhaaltje word vertelt door de verteller.
+										de texten die jij verandert begint met een <p> en eindigen op </p>, doe nooit iets anders met de html.
+										het tekstje gaad altijd over goud!
+										
+										de texten die jij verandert begint met een <p> en eindigen op </p>
+															<p>
+																Al snel had de dochter spijt dat ze dit had vertelt, want ze kan
+																natuurlijk geen goud spinnen. totdat er iemand mysterieus
+																tevoorschijn kwam.{" "}
+															</p>`
+		,
+		`
+		behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
+		Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
+		VOEG NOOIT CSS TOE. houd ermee rekening dat het tekstje gaat over repelsteeltje die praat tegen de molenaarsdochter.
+		het gaat altijd over goud!
+		
+		de texten die jij verandert begint met een <p> en eindigen op </p>, doe nooit iets anders met de html.
+		
+		
+							<p>
+								"Ik kan goud spinnen voor jouw, maar daar is een catch achter.
+								ik doe dit alleen in ruil voor jouw eerste kind."
+							</p>`
+		,
+		`
+		behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
+		Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
+		VOEG NOOIT CSS TOE. houd ermee rekening dat het van het perspectief van een verteller komt.
+		
+		de texten die jij verandert begint met een <p> en eindigen op </p>, De quest is in de <mark> tag. doe nooit iets anders met de html.
+		
+		
+		<p>
+		De man spon goud voor de dochter in ruil voor hun eerste kind.
+		De koning en de dochter trouwden samen. ze kregen een kindje. De koning stuurt jouw op om zijn naam te achterhalen!<br /><br />
+		<mark>Quest: Hover over De mysterieuse man voor zijn naam te achterhalen</mark>
+	</p>`,
+
+	`
+	behoud altijd de html structuur. je mag deze NOOIT veranderen. en stuur deze terug.
+	Verander deze tekst zodat hij helemaal anders is. doe dit zonder de context te veranderen. maak het in de stijl die is meegegeven.
+	VOEG NOOIT CSS TOE. houd ermee rekening dat het eerste tekstje gaat over een prins die tegen repelsteeltje praat.
 	
-			if (!response.ok) {
-				const errorData = await response.json();
-				throw new Error(errorData.error || 'Error generating text');
-			}
+	de texten die jij verandert begint met een <p> en eindigen op </p>, De quest is in de <mark> tag. doe nooit iets anders met de html.
 	
-			const responseData = await response.json();
-			console.log('Response data:', responseData); // Log the response data
 	
-			const styledMessage = responseData.choices[0].message;
-			console.log('Styled message:', styledMessage);
-			setStyledText(styledMessage.content || 'No styled text found3');
-		} catch (error) {
-			console.error('Error:', error);
-			setError(error.message);
-		}
+	<p>
+	Na erg veel nadenken hebben wij het gevonden! Jouw naam is repelsteeltje!
+</p>`
+
+
+	];
+
+	const handleStyleChange = (event) => {
+		setStyle(event.target.value);
 	};
+
+	const generateText = async (prompt, index = null, language = '') => {
+        try {
+            const response = await fetch('http://localhost:3001/generate-text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt, style, model: 'gpt-3.5-turbo', temperature: 0.2, max_tokens: 50, language })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error generating text');
+            }
+
+            const responseData = await response.json();
+            const styledMessage = responseData.choices[0].message.content || 'No styled text found';
+
+            if (index === null) {
+                setStyledText(styledMessage);
+            } else {
+                setFixedPromptTexts(prev => {
+                    const newTexts = [...prev];
+                    newTexts[index] = styledMessage;
+                    return newTexts;
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setError(error.message);
+        }
+    };
+
+	const applyStyle = async () => {
+        setError('');  // Reset any previous error
+        await generateText(text); // Generate text for user input
+        for (let i = 0; i < fixedPromptTexts.length; i++) {
+            await generateText(fixedPrompts[i], i, style); // Generate styled text for fixed prompts with specified language
+        }
+    };
+
 
 
 	return (
@@ -84,26 +216,27 @@ function Repelsteeltje() {
 				<ParallaxLayer offset={0} speed={0.6} factor={1}>
 					<div className="fsanimation-layer" id="scene-1-11"></div>
 				</ParallaxLayer>
+
 				<ParallaxLayer offset={0} speed={0.6} factor={1}>
-				<div className="repelsteeltje-container">
-            <div className="text-styling">
-                <textarea
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder="Enter your text here..."
-                ></textarea>
-                <select value={style} onChange={handleStyleChange}>
-                    <option value="Formal">Formal</option>
-                    <option value="Informal">Informal</option>
-                    <option value="Fairy Tale">Fairy Tale</option>
-                </select>
-                <button onClick={applyStyle}>Apply Style</button>
-                {error && <p className="error">{error}</p>}
-            </div>
-            <div className="styled-text">
-                {styledText && <p>{styledText}</p>}
-            </div>
-        </div>
+					<div className="repelsteeltje-container">
+						<div className="text-styling">
+							<textarea
+								value={text}
+								onChange={(e) => setText(e.target.value)}
+								placeholder="Enter your text here..."
+							></textarea>
+							<select value={style} onChange={handleStyleChange}>
+								<option value="Formeel">Formeel</option>
+								<option value="Informeel">Informeel</option>
+								<option value="sprookjesstijl">sprookje</option>
+							</select>
+							<button onClick={applyStyle}>Apply Style</button>
+							{error && <p className="error">{error}</p>}
+						</div>
+						<div className="styled-text">
+							{styledText && <p>{styledText}</p>}
+						</div>
+					</div>
 				</ParallaxLayer>
 
 				<ParallaxLayer offset={2} speed={0}>
@@ -227,21 +360,13 @@ function Repelsteeltje() {
 							Er was eens... <br />
 							<br />
 						</h2>
-						<p>
-							in een wereld ver weg van hier, waar de wind zong door de toppen
-							van eeuwenoude bomen,
-							<br />
-							een gezin dat zijn bestaan vond tussen de wiegende velden en de
-							draaiende wieken van een molen.
-							<br />
-							De molenaar, een man van eenvoud en arbeid, deelde zijn dagen met
-							zijn dochter,
-							<br />
-							een jonge vrouw wiens schoonheid net zo stralend was als het
-							gouden koren dat ze hielp malen. <br />
-							Samen bewerkten ze het land en deelden ze momenten van vreugde te
-							midden van de rust van hun bescheiden boerderij.
-						</p>
+						<div className="fixedPromptDiv">
+							<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[0] }}></div>
+						</div>
+
+
+
+
 					</div>
 				</ParallaxLayer>
 
@@ -276,22 +401,15 @@ function Repelsteeltje() {
 						<div class="sprookjesdiv">
 							<div class="textmeisje">
 								<img src="meisje.png"></img>
-								<p>
-									"Vader, <br />
-									ik geloof dat ik iets kan wat de mensen versteld zal doen
-									staan.
-									<br />
-									Ik kan goud spinnen, vader. Echt goud!"
-								</p>
+								<div className="fixedPromptDiv">
+									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[1] }}></div>
+								</div>
 							</div>
 							<div class="textvader">
 								<img src="vader.png"></img>
-								<p>
-									{" "}
-									"Dat is erg speciaal mijn dochter, <br />
-									Ik moet dit vertellen aan de prins, zodat je <br />
-									met hem kan trouwen."
-								</p>
+								<div className="fixedPromptDiv">
+									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[2] }}></div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -322,47 +440,41 @@ function Repelsteeltje() {
 				<ParallaxLayer offset={5.1} speed={0} factor={0.3}>
 					<div class="sprookjestext koningwrap">
 						<div class="sprookjesdiv koningdiv">
-							
+
 							<img src="koning.png"></img>
-							<p>
-								"Bewijs jouzelf dat je goud kan spinnen, en alleen als je dit
-								kan zal en wil ik met je trouwen."
-							</p>
+							<div className="fixedPromptDiv">
+									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[3] }}></div>
+								</div>
 						</div>
 						<div class="sprookjesdiv koningdiv sprookjestextdiv">
 							<p>
-								Al snel had de dochter spijt dat ze dit had vertelt, want ze kan
-								natuurlijk geen goud spinnen. totdat er iemand mysterieus
-								tevoorschijn kwam.{" "}
+							<div className="fixedPromptDiv">
+									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[4] }}></div>
+								</div>
 							</p>
 						</div>
 						<div class="sprookjesdiv koningdiv repelsteeltjediv">
-							<p>
-								"Ik kan goud spinnen voor jouw, maar daar is een catch achter.
-								ik doe dit alleen in ruil voor jouw eerste kind."
-							</p>
-							<Animation/>
+						<div className="fixedPromptDiv">
+									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[5] }}></div>
+								</div>
+							<Animation />
 						</div>
 						<div class="sprookjesdiv koningdiv sprookjestextdiv">
-							<p>
-								De man spon goud voor de dochter in ruil voor hun eerste kind.
-								De koning en de dochter trouwden samen. ze kregen een kindje. De koning stuurt jouw op om zijn naam te achterhalen!<br/><br/>
-								<mark>Quest: Hover over De mysterieuse man voor zijn naam te achterhalen</mark>
+						<div className="fixedPromptDiv">
+									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[6] }}></div>
+								</div>
 
-
-							</p>
-							 
 							<p>
-								
+
 							</p>
 						</div>
 						<div class="sprookjesdiv koningdiv koningmeisjediv">
 							<img src="koningmeisje.png"></img>
-							<p>
-								 Na erg veel nadenken hebben wij het gevonden! Jouw naam is repelsteeltje!
-							</p>
+							<div className="fixedPromptDiv">
+									<div dangerouslySetInnerHTML={{ __html: fixedPromptTexts[7] }}></div>
+								</div>
 						</div>
-						
+
 					</div>
 				</ParallaxLayer>
 
@@ -377,7 +489,7 @@ function Repelsteeltje() {
 				</ParallaxLayer>
 			</Parallax>
 
-        </div>		
+		</div>
 	);
 }
 export default Repelsteeltje;
